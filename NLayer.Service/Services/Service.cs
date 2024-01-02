@@ -3,13 +3,7 @@ using NLayer.Core.Repositories;
 using NLayer.Core.Services;
 using NLayer.Core.UnitOfWork;
 using NLayer.Service.Exceptions;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NLayer.Service.Services
 {
@@ -17,7 +11,8 @@ namespace NLayer.Service.Services
     {
         private readonly IGenericRepository<T> _repository;
         private readonly IUnitOfWork _unitOfWork;
-        public Service(IGenericRepository<T> repository, IUnitOfWork unitOfWork) {
+        public Service(IGenericRepository<T> repository, IUnitOfWork unitOfWork)
+        {
             _repository = repository;
             _unitOfWork = unitOfWork;
         }
@@ -34,10 +29,10 @@ namespace NLayer.Service.Services
             await _unitOfWork.CommitAsync();
             return entities;
         }
-     
+
         public async Task<bool> AnyAsync(Expression<Func<T, bool>> expression)
         {
-           return await _repository.AnyAsync(expression);
+            return await _repository.AnyAsync(expression);
         }
 
         public async Task<IEnumerable<T>> GetAllAsync()
@@ -47,7 +42,7 @@ namespace NLayer.Service.Services
 
         public async Task<T> GetByIdAsync(int id)
         {
-           var hasProduct = await _repository.GetByIdAsync(id);
+            var hasProduct = await _repository.GetByIdAsync(id);
             if (hasProduct == null)
             {
                 throw new NotFoundException($"{typeof(T).Name} ({id}) not found.");
@@ -58,7 +53,7 @@ namespace NLayer.Service.Services
         public async Task RemoveAsync(T entity)
         {
             _repository.Remove(entity);
-            await _unitOfWork.CommitAsync();    
+            await _unitOfWork.CommitAsync();
         }
 
         public async Task RemoveRangeAsync(IEnumerable<T> entities)
